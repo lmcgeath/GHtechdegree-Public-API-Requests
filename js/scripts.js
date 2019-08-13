@@ -1,49 +1,28 @@
-let employees = [];
-const gallery = document.querySelector('.gallery')
-const body = document.querySelector('body');
-//Fetches random user api list and parses it into json format
-// fetch(url)
-//   .then(response => response.json())
-//   .then(data => displayData(data.results))
-
+// ---------------------------------------------
+//                  Fetch Requests
+// ---------------------------------------------
 $.ajax({
   url: 'https://randomuser.me/api/?results=12&nat=us',
   dataType: 'json',
   success: function(data) {
     displayData(data.results)
-    // displayModal(data.results)
   }
 });
-const card = document.querySelectorAll('.card');
-console.log(card)
-
-// const button = event.target;
-// closeBtn.addEventListener('click', //remove modal popup)
-// let card = document.getElementsByTagName('div .card')
-
-// let closeBtn = document.createElement('BUTTON')
-// closeBtn.setAttribute('id','modal-close-btn')
-// const modal = document.createElement('div');
-// modal.setAttribute('class', 'modal-container')
-// console.log(modal)
-
-// let closeBtn = document.querySelector('#modal-close-btn');
-card.addEventListener('click', function(){
-  console.log('test')
-})
-
+// ---------------------------------------------
+//                  Variables
+// ---------------------------------------------
+const card = document.querySelector('.card');
+const gallery = document.querySelector('.gallery')
+const body = document.querySelector('body');
 // ---------------------------------------------
 //                  FUNCTIONS
 // ---------------------------------------------
-// function getEmployees(response){
-//   let employees = response;
-//   console.log(employees)
-//   return employees
-// }
-
+/*Creates HTML elements, displays 12 random user from the fetched data results and calls the displayModal function when a user card is clicked*/
 function displayData(data){
-data.map(function(person){
-   const html = `<div class="card">
+data.map(person => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
         <div class="card-img-container">
             <img class="card-img" src="${person.picture.large}" alt="profile picture">
         </div>
@@ -54,33 +33,36 @@ data.map(function(person){
         </div>
     </div>
     `;
-    gallery.innerHTML += html;
-    // $('gallery').append(html);
+    gallery.append(card);
+    card.addEventListener('click',() => {
+      displayModal(data, person)
+    })
   });
 };
-
-function displayModal(data){
-  data.map(function(person){
-  const dob = new Date(person.dob.date)
-  body.innerHTML = `
-    <div class="modal-container">
+/*Creates the HTML from the fetched user data, displays the modal view when clicked and hides it when the X button is clicked*/
+function displayModal(data, clicked){
+  const modalDiv = document.createElement('div');
+  modalDiv.className = 'modal-container';
+//Creates a new date object to format birthday
+  const dob = new Date(clicked.dob.date)
+  modalDiv.innerHTML = `
       <div class="modal">
           <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
           <div class="modal-info-container">
-              <img class="modal-img" src="${person.picture.large}" alt="profile picture">
-              <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
-              <p class="modal-text">${person.email}</p>
-              <p class="modal-text cap"> ${person.location.city}, ${person.location.state}</p>
+              <img class="modal-img" src="${clicked.picture.large}" alt="profile picture">
+              <h3 id="name" class="modal-name cap">${clicked.name.first} ${clicked.name.last}</h3>
+              <p class="modal-text">${clicked.email}</p>
+              <p class="modal-text cap"> ${clicked.location.city}, ${clicked.location.state}</p>
               <hr>
-              <p class="modal-text">${person.cell}</p>
-              <p class="modal-text">${person.location.street} ${person.location.postcode}</p>
+              <p class="modal-text">${clicked.cell}</p>
+              <p class="modal-text">${clicked.location.street} ${clicked.location.postcode}</p>
               <p class="modal-text">Birthday: ${dob.toLocaleDateString('en-us')}</p>
           </div>
       </div>`
+      body.append(modalDiv);
+  let closeBtn = document.querySelector('button');
+  closeBtn.className = 'modal-close-btn';
+  closeBtn.addEventListener('click', () => {
+    modalDiv.style.display = 'none';
   })
-}
-
-// closeBtn.addEventListener('click', function(){
-// modal.style.display = 'none'
-// console.log('test')
-// })
+};
