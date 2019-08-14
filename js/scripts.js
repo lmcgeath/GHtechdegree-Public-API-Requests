@@ -62,7 +62,7 @@ function displayModal(data, clicked){
       body.append(modalDiv);
   let closeBtn = document.querySelector('button');
   closeBtn.className = 'modal-close-btn';
-  closeBtn.addEventListener('click', () => {
+  modalDiv.addEventListener('click', () => {
     modalDiv.style.display = 'none';
   })
 };
