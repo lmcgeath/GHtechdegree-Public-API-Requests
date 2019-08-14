@@ -62,7 +62,14 @@ function displayModal(data, clicked){
       body.append(modalDiv);
   let closeBtn = document.querySelector('button');
   closeBtn.className = 'modal-close-btn';
+  //Listens for user to click the close button and closes modal window
   modalDiv.addEventListener('click', () => {
     modalDiv.style.display = 'none';
+  })
+  //Listens for user to click the outside the modal window and closes it
+  window.addEventListener('click', () => {
+    if (event.target === modalDiv){
+    modalDiv.style.display = 'none';
+    }
   })
 };
