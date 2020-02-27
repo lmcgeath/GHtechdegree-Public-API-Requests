@@ -6,6 +6,7 @@ $.ajax({
   dataType: 'json',
   success: function(data) {
     displayData(data.results)
+    console.log(data.results)
   }
 });
 // ---------------------------------------------
@@ -55,7 +56,7 @@ function displayModal(data, clicked){
               <p class="modal-text cap"> ${clicked.location.city}, ${clicked.location.state}</p>
               <hr>
               <p class="modal-text">${clicked.cell}</p>
-              <p class="modal-text">${clicked.location.street} ${clicked.location.postcode}</p>
+              <p class="modal-text">${clicked.location.street.number} ${clicked.location.street.name} ${clicked.location.postcode}</p>
               <p class="modal-text">Birthday: ${dob.toLocaleDateString('en-us')}</p>
           </div>
       </div>`
